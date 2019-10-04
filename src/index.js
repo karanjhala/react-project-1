@@ -1,5 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React, {Component} from 'react'
+import ReactDOM, {render} from 'react-dom'
 
 var style = {
     backgroundColor: 'orange',
@@ -32,12 +32,61 @@ ReactDOM.render (
     document.getElementById('root')
 )
 */
-/* Create a React Component */
-class Message extends React.Component {
+let skiData = {
+    total: 50,
+    powder: 20,
+    backcountry: 10,
+    goal: 100
+}
+
+class SkiDayCounter extends Component {
+    //These are arrow functions or methods, which perform a single task
+    getPercent = decimal => {
+        return decimal * 100 + '%'
+    }
+    calcGoalProgress = (total,goal) => {
+        return this.getPercent(total/goal)
+    }
     render() {
+    // This line below adds this.props to all the variables in the array so you can skip typing this.props all the time
+        const {total, powder, backcountry, goal} = this.props
+        return (
+            <section>
+                <div>
+                    <p>Total Days: {total}</p>
+                </div>
+                <div>
+                    <p>Powder Days: {powder}</p>
+                </div>
+                <div>
+                    <p>backcountry Days: {backcountry}</p>
+                </div>
+                <div>
+                    <p>Goal Progress: {this.calcGoalProgress(total,goal)}</p>
+                </div>
+                
+            </section>
+        )
+    }
+}
+render (
+    <SkiDayCounter 
+        total={skiData.total}
+        powder={skiData.powder}
+        backcountry={skiData.backcountry}
+        goal={skiData.goal}/>,
+        document.getElementById('root')
+)
+
+/* Create a React Component */
+class Message extends Component {
+    render() {
+        console.log(this.props)
         return (
             <div>
-                <h1>Hello Everyone, How's it going? I am a component</h1>
+                <h1 style={{color:this.props.color}}>Hello Everyone, How's it going? I am a component</h1>
+                <h1> {this.props.msg} </h1>
+                <p>I'll check back in {this.props.mins} minutes</p>
             </div>
         ) 
     }
@@ -45,13 +94,15 @@ class Message extends React.Component {
 /*
 Component name is supposed to have First letter in capital,
 in order to differenciate it from other JSX elements.
+    Make sure spacing is correct too
 
-Make sure spacing is correct too
-
+Properties can be used to insert dynamic data in react.
+    They can be defined when rendering in ReactDOM.render
+    They can be used when creating components
 
 */
 
-ReactDOM.render( 
-    <Message />,
-    document.getElementById('root')
-)
+// render( 
+//     <Message msg="how are you?" color="blue" mins={10} />,
+//     document.getElementById('root')
+// )
