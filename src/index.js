@@ -2,6 +2,28 @@ import React from 'react'
 //import ReactDOM, {render} from 'react-dom'
 import {render} from 'react-dom'
 
+let bookList = [
+    {
+        'title': "Make way for Noddy",
+        'author' : "Some Amazing Author",
+        'pages' :"100"
+    },
+    {
+        'title' : "Thomas the Engine",
+        'author' : "Another Amazing Author",
+        'pages' : "101"
+    },
+    {
+        'title' : "Famous Five",
+        'author' : "Enid Blyton",
+        'pages' : "102"
+    },
+    {
+        'title': "Secret Seven",
+        'author': "Enid Blyton",
+        'pages': "102"
+    }
+]
 
 /* Composing Components
 */
@@ -14,19 +36,23 @@ const Book = ({title,author,pages}) => {
         </section> 
     )
 }
-const Library = () => {
+const Library = ({books}) => {
     return (
         <div>
-            <Book title="Make way for Noddy" author="Some Amazing Author" pages="100"/>
-            <Book title="Thomas the Engine" author="Another Amazing Author" pages="101" />
-            <Book title="Famous Five" author="Enid Blyton" pages="102" />
+            
+            {books.map(
+                (book,i) => <Book key={i}
+                title={book.title}
+                author={book.author}
+                pages={book.pages}/>
+            )}
         </div>
     )
 }
 
 render (
     <div>
-    <Library />
+    <Library books={bookList} />
     </div>,
     document.getElementById('root')
 )
@@ -98,7 +124,7 @@ Properties can be used to insert dynamic data in react.
 //     <Message msg="how are you?" color="blue" mins={10} />,
 //     document.getElementById('root')
 // )
-
+/*Component Function
 let skiData = {
     total: 50,
     powder: 20,
@@ -112,7 +138,7 @@ const getPercent = decimal => {
 const calcGoalProgress = (total, goal) => {
 	return getPercent(total/goal)
 }
-/*Component Function
+
 
 const SkiDayCounter = ({total, powder, backcountry, goal}) => {
 	return (
