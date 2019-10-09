@@ -27,23 +27,51 @@ let bookList = [
 
 /* Composing Components
 */
-const Book = ({title,author,pages}) => {
+const Book = ({title,author,pages,freeBookmark}) => {
     return (
         <section> 
             <h2>{title}</h2>
             <p>By: {author}</p>
             <p>Pages: {pages}</p>
+            <p>Free Bookmark Today: {freeBookmark ?'yes!' : 'no'}</p>
         </section> 
     )
 }
-class Library extends React.Component{
-    state = {open:false}
 
+const Hiring = () => 
+<div>
+    <p>This library is Hiring!</p>
+</div>
+const NotHiring = () =>
+    <div>
+        <p>This library is not Hiring!</p>
+    </div>
+
+class Library extends React.Component{
     
+    state = {
+        open:true,
+        freeBookmark:true,
+        hiring:true,
+        data:[],
+        loading:false
+    }
+
+    componentDidMount() {
+        console.log("The Component is now mounted!")
+        this.setState({loading:true})
+        fetch('https://hplussport.com/api/products/order/price/sort/asc/qty/1')
+            .then(data => data.json())
+            .then(data => this.setState({data , loading:false}))
+    }
+    componentDidUpdate() {
+        console.log("The Component just updated!")
+    }
 
     toggleOpenClosed = () => {
         this.setState(prevState => ({
-            open: !prevState.open 
+            open: !prevState.open,
+            freeBookmark: !prevState.open 
         }))
     }
 
@@ -51,13 +79,28 @@ class Library extends React.Component{
         const {books} = this.props
         return (
             <div>
+                {this.state.hiring ? <Hiring /> : <NotHiring />}
+                {this.state.loading
+                    ? "loading...."
+                    : <div>
+                        {this.state.data.map(product => {
+                            return(
+                                <div key={product.id}>
+                                    <h3> Library product of the week!</h3>
+                                    <img src={product.image} height={100} />
+                                </div>
+                            )
+                        })}
+                        </div>
+                }
                 <h1>This library is {this.state.open ? 'open' : 'closed'}</h1>
                 <button onClick={this.toggleOpenClosed}>Change</button>
                 {books.map(
                     (book, i) => <Book key={i}
                         title={book.title}
                         author={book.author}
-                        pages={book.pages} />
+                        pages={book.pages}
+                        freeBookmark={this.state.freeBookmark} />
                 )}
             </div>
         )
